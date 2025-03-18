@@ -8,7 +8,7 @@ export const getBalance = async () => {
   const { has } = await auth.protect()
 
   const reverificationConfig: ReverificationConfig = {
-    afterMinutes: 5,
+    afterMinutes: 10,
     level: 'first_factor',
   }
 
