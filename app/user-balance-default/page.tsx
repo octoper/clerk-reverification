@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { getBalance } from "../actions/getBalance";
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
+import { RatelimitError } from "@/lib/error";
 
 export default function UserBalance() {
   const [balance, setBalance] = useState<{
@@ -36,6 +37,8 @@ export default function UserBalance() {
       const balanceResponse = await retrieveBalance();
 
       setBalance(balanceResponse);
+
+      toast.success("Balance retrieved successfully");
     } catch (e) {
       // Handle if user cancels the reverification process
       if (isClerkRuntimeError(e) && e.code === "reverification_cancelled") {
@@ -43,7 +46,11 @@ export default function UserBalance() {
         return;
       }
 
-      toast.error("An error occurred while retrieving your balance");
+      if (e instanceof RatelimitError) {
+        toast.error("You are making too many requests. Please try again later.");
+      } else {
+        toast.error("An error occurred while retrieving your balance");
+      }
     }
   };
 

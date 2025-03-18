@@ -1,5 +1,6 @@
 'use server'
 
+import { RatelimitError } from '@/lib/error'
 import { auth, reverificationError } from '@clerk/nextjs/server'
 import { ReverificationConfig } from '@clerk/types'
 
@@ -19,8 +20,12 @@ export const getBalance = async () => {
     return reverificationError(reverificationConfig)
   }
 
+  if (Math.random() < 0.5) {
+    throw new RatelimitError()
+  }
+
   return {
-    amount: Math.random() * 100,
+    amount: 147467813.66,
     currency: 'USD',
   }
 }

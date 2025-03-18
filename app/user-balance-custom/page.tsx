@@ -21,7 +21,7 @@ export default function UserBalance() {
 
   const formatBalace = useMemo(() => {
     if (!balance) {
-      return "hidden";
+      return "$*********";
     }
 
     return Intl.NumberFormat("en-US", {
@@ -39,6 +39,8 @@ export default function UserBalance() {
       const balanceResponse = await retrieveBalance();
 
       setBalance(balanceResponse);
+
+      toast.success("Balance retrieved successfully");
     } catch (e) {
       // Handle if user cancels the reverification process
       if (isClerkRuntimeError(e) && e.code === "reverification_cancelled") {
@@ -63,16 +65,18 @@ export default function UserBalance() {
   }
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="flex flex-col gap-4">
-        <div>
-          Your balance is{" "}
-          <span className={cn("font-bold")}>{formatBalace}</span>
-        </div>
-        <div className="space-x-4">
-          <Button onClick={handleBalanceRetrieve}>
-            {balance ? "Hide" : "Retrieve"} balance
-          </Button>
+    <div>
+      <div className="flex items-center justify-center">
+        <div className="flex flex-col gap-4">
+          <div>
+            Your balance is{" "}
+            <span className={cn("font-bold")}>{formatBalace}</span>
+          </div>
+          <div className="space-x-4">
+            <Button onClick={handleBalanceRetrieve}>
+              {balance ? "Hide" : "Retrieve"} balance
+            </Button>
+          </div>
         </div>
       </div>
     </div>

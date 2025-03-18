@@ -2,6 +2,7 @@
 
 import { VerificationComponent } from "@/components/reverification/reverification";
 import { Button } from "@/components/ui/button";
+import { RatelimitError } from "@/lib/error";
 import { useReverification, useUser } from "@clerk/nextjs";
 import { isClerkRuntimeError } from "@clerk/nextjs/errors";
 import { toast } from "sonner";
@@ -34,7 +35,11 @@ export default function UpdateUser() {
         return;
       }
 
-      toast.error("An error occurred while updating your primary email");
+      if (e instanceof RatelimitError) {
+        toast.error("You are making too many requests. Please try again later.");
+      } else {
+        toast.error("An error occurred while retrieving your balance");
+      }
     }
   };
 

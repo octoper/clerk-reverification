@@ -8,7 +8,7 @@ import { toast } from "sonner";
 export default function UpdateUser() {
   const { user } = useUser();
   const {
-    action: makeEmailPrimary
+    action: makeEmailPrimary,
   } = useReverification(
     (emailAddressId: string) =>
       user?.update({ primaryEmailAddressId: emailAddressId }),
@@ -34,7 +34,7 @@ export default function UpdateUser() {
     <div className="flex items-center justify-center">
       <div className="flex flex-col gap-4">
         <span>
-          Your primary email address is{" "}
+          Your primary email address is {" "}
           <span className="font-bold">
             {user?.primaryEmailAddress?.emailAddress}
           </span>

@@ -53,11 +53,14 @@ export function VerificationComponent({
 
   const handleVerificationAttempt = async () => {
     try {
-      await session?.attemptFirstFactorVerification({
+      const verification = await session?.attemptFirstFactorVerification({
         strategy: "email_code",
         code,
       });
-      complete();
+
+      if (verification?.status === "complete") {
+        complete();
+      }
     } catch (e) {
       console.error("Error verifying session", e);
     }
