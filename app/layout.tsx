@@ -45,7 +45,7 @@ export default function RootLayout({
           </header>
           <div className='w-full mx-auto'><ClerkLoaded>{children}</ClerkLoaded></div>
 
-          <Toaster />
+          <Toaster position='bottom-center' />
         </body>
       </html>
     </ClerkProvider>
