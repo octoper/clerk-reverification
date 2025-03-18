@@ -43,7 +43,7 @@ export default function UpdateUser() {
         <div className="flex flex-col gap-4">
           {user?.emailAddresses.map((email) => (
             <div key={email.id} className="flex flex-grow items-center gap-2">
-              <div className="flex flex-grow">{email.emailAddress}</div>
+              <div className="flex flex-grow">{email.emailAddress}  - {email.verification.status}</div>
               <div>
                 {user?.primaryEmailAddress?.id !== email.id ? (
                   <Button size="sm" onClick={() => handleClick(email.id)}>

@@ -33,7 +33,7 @@ export default function RootLayout({
             <div>
               <Link href="/">Home</Link>
             </div>
-            <div>
+            <div className='space-x-2'>
               <SignedOut>
                 <SignInButton />
                 <SignUpButton />
