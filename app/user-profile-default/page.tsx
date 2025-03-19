@@ -7,11 +7,8 @@ import { toast } from "sonner";
 
 export default function UpdateUser() {
   const { user } = useUser();
-  const {
-    action: makeEmailPrimary,
-  } = useReverification(
-    (emailAddressId: string) =>
-      user?.update({ primaryEmailAddressId: emailAddressId }),
+  const makeEmailPrimary = useReverification((emailAddressId: string) =>
+    user?.update({ primaryEmailAddressId: emailAddressId })
   );
 
   const handleClick = async (emailAddressId: string) => {
@@ -34,7 +31,7 @@ export default function UpdateUser() {
     <div className="flex items-center justify-center">
       <div className="flex flex-col gap-4">
         <span>
-          Your primary email address is {" "}
+          Your primary email address is{" "}
           <span className="font-bold">
             {user?.primaryEmailAddress?.emailAddress}
           </span>
@@ -43,7 +40,9 @@ export default function UpdateUser() {
         <div className="flex flex-col gap-4">
           {user?.emailAddresses.map((email) => (
             <div key={email.id} className="flex flex-grow items-center gap-2">
-              <div className="flex flex-grow">{email.emailAddress}  - {email.verification.status}</div>
+              <div className="flex flex-grow">
+                {email.emailAddress} - {email.verification.status}
+              </div>
               <div>
                 {user?.primaryEmailAddress?.id !== email.id ? (
                   <Button size="sm" onClick={() => handleClick(email.id)}>

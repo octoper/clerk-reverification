@@ -1,26 +1,27 @@
 "use client";
 
-import { VerificationComponent } from "@/components/reverification/reverification";
 import { Button } from "@/components/ui/button";
+import { useReverificationStatus } from "@/lib/contexts";
 import { RatelimitError } from "@/lib/error";
 import { useReverification, useUser } from "@clerk/nextjs";
-import { isClerkRuntimeError } from "@clerk/nextjs/errors";
 import { toast } from "sonner";
 
 export default function UpdateUser() {
   const { user } = useUser();
-  const {
-    action: makeEmailPrimary,
-    inProgress,
-    cancel,
-    complete,
-    level,
-  } = useReverification(
+  const { setState } = useReverificationStatus();
+  const makeEmailPrimary = useReverification(
     (emailAddressId: string) =>
       user?.update({ primaryEmailAddressId: emailAddressId }),
     {
-      defaultUI: false,
-    }
+      onNeedsReverification: ({ complete, cancel, level }) => {
+        setState({
+          inProgress: true,
+          level,
+          cancel,
+          complete,
+        });
+      },
+    },
   );
 
   const handleClick = async (emailAddressId: string) => {
@@ -29,31 +30,12 @@ export default function UpdateUser() {
 
       toast.success("Primary email updated successfully");
     } catch (e) {
-      // Handle if user cancels the reverification process
-      if (isClerkRuntimeError(e) && e.code === "reverification_cancelled") {
-        toast.error("User cancelled reverification");
-        return;
-      }
-
       if (e instanceof RatelimitError) {
         toast.error("You are making too many requests. Please try again later.");
-      } else {
-        toast.error("An error occurred while retrieving your balance");
+        return;
       }
     }
   };
-
-  if (inProgress) {
-    return (
-      <div className="flex items-center justify-center">
-        <VerificationComponent
-          level={level}
-          complete={complete}
-          cancel={cancel}
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="flex items-center justify-center">

@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 import Link from 'next/link'
+import { ReverificationProvider } from '@/lib/contexts'
+import { VerificationComponent } from '@/components/reverification/reverification'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,27 +29,30 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <header className="flex justify-between items-center p-4 gap-4 h-16">
-            <div>
-              <Link href="/">Home</Link>
-            </div>
-            <div className='space-x-2'>
-              <SignedOut>
-                <SignInButton />
-                <SignUpButton />
-              </SignedOut>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
-            </div>
-          </header>
-          <div className='w-full mx-auto'><ClerkLoaded>{children}</ClerkLoaded></div>
+      <ReverificationProvider>
+        <html lang="en">
+          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <header className="flex justify-between items-center p-4 gap-4 h-16">
+              <div>
+                <Link href="/">Home</Link>
+              </div>
+              <div className='space-x-2'>
+                <SignedOut>
+                  <SignInButton />
+                  <SignUpButton />
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </div>
+            </header>
+            <div className='w-full mx-auto'><ClerkLoaded>{children}</ClerkLoaded></div>
 
-          <Toaster position='bottom-center' />
-        </body>
-      </html>
+            <VerificationComponent />
+            <Toaster position='bottom-center' />
+          </body>
+        </html>
+      </ReverificationProvider>
     </ClerkProvider>
   )
 }

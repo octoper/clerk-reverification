@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "6.12.6-snapshot.v20250318141728",
-    "@clerk/types": "4.49.0-snapshot.v20250318141728",
+    "@clerk/nextjs": "6.12.5-secco-1742386464324-dgom",
+    "@clerk/types": "4.48.0-secco-1742386464324-dgom",
     "@hookform/resolvers": "^4.1.3",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-alert-dialog": "^1.1.6",

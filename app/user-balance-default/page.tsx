@@ -14,7 +14,7 @@ export default function UserBalance() {
     amount: number;
     currency: string;
   } | null>(null);
-  const { action: retrieveBalance } = useReverification(getBalance);
+  const retrieveBalance = useReverification(getBalance);
 
   const formatBalace = useMemo(() => {
     if (!balance) {

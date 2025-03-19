@@ -2,23 +2,31 @@
 
 import { Button } from "@/components/ui/button";
 import { useReverification } from "@clerk/nextjs";
-import { isClerkRuntimeError } from "@clerk/nextjs/errors";
 import { toast } from "sonner";
 import { getBalance } from "../actions/getBalance";
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
-import { VerificationComponent } from "@/components/reverification/reverification";
 import { RatelimitError } from "@/lib/error";
+import { isClerkRuntimeError } from "@clerk/nextjs/errors";
+import { useReverificationStatus } from "@/lib/contexts";
 
 export default function UserBalance() {
   const [balance, setBalance] = useState<{
     amount: number;
     currency: string;
   } | null>(null);
-  const { action: retrieveBalance, cancel, complete, inProgress, level } =
-    useReverification(getBalance, {
-      defaultUI: false,
-    });
+  const { setState } = useReverificationStatus();
+
+  const retrieveBalance = useReverification(getBalance, {
+    onNeedsReverification: ({ cancel, complete, level }) => {
+      setState({
+        inProgress: true,
+        level,
+        cancel,
+        complete,
+      });
+    },
+  });
 
   const formatBalace = useMemo(() => {
     if (!balance) {
@@ -50,24 +58,14 @@ export default function UserBalance() {
       }
 
       if (e instanceof RatelimitError) {
-        toast.error("You are making too many requests. Please try again later.");
+        toast.error(
+          "You are making too many requests. Please try again later."
+        );
       } else {
         toast.error("An error occurred while retrieving your balance");
       }
     }
   };
-
-  if (inProgress) {
-    return (
-      <div className="flex items-center justify-center">
-        <VerificationComponent
-          level={level}
-          cancel={cancel}
-          complete={complete}
-        />
-      </div>
-    );
-  }
 
   return (
     <div>
